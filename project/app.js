@@ -24,6 +24,15 @@ app.get("/login", (req, res) => {
   res.send("hello login");
 });
 
+app.get("/main/ldk", (req, res) => {
+  res.send("hello ldk");
+});
+// 와일드카드 응답은 항상 최하단에 위치해야한다(Node.js는 JS기반이기 때문에 항상 위부터 아래로 코드가 순차적으로 실행함을 유의해야한다.)
+app.get("/main/:user", (req, res) => {
+  res.send("hello wildcard");
+});
+
+// 서버 실행
 app.listen(app.get("port"), () => {
   console.log("서버 실행");
 });
