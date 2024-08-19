@@ -1,6 +1,7 @@
 const { error } = require("console");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const { Cookie } = require("express-session");
 const morgan = require("morgan");
 const path = require("path"); // 경로처리
 
@@ -10,7 +11,7 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 app.use(morgan('dev'))
-app.use(cookieParser());
+app.use(cookieParser('amhozirong'));
 
 
 // 미들웨어 사용
@@ -22,7 +23,7 @@ app.use(
 );
 
 app.get("/", (req, res, next) => {
-  res.clearCookie("username");
+  res.cookie('signedCookie', 'signedValue', { maxAge: 900000, httpOnly: true, signed: true });
   next();
   // res.sendFile(path.join(__dirname, "index.html"));
 });
