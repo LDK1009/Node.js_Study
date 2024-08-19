@@ -28,6 +28,10 @@ app.use(
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
+  // 1. 한 라우터 안에는 하나의 요청(res)만 가능하다.
+  // res.send("hello root");
+  // 2. 라우터 내부에서 요청이 완료되었다고 함수가 종료되지 않는다.
+  console.log("응답 후에도 이 코드가 실행이 됩니다.");
 });
 
 app.get("/main", (req, res) => {
