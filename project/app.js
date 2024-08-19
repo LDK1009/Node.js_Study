@@ -32,6 +32,11 @@ app.get("/main/:user", (req, res) => {
   res.send("hello wildcard");
 });
 
+// 아스트로(*)는 해당 메서드의 모든 경로에 해당하는 응답을 제공한다(즉, 최하단에 위치해야함)
+app.get("*", (req, res) => {
+  res.send("hello evrybody");
+});
+
 // 서버 실행
 app.listen(app.get("port"), () => {
   console.log("서버 실행");
