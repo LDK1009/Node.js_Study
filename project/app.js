@@ -1,3 +1,4 @@
+const { error } = require("console");
 const express = require("express");
 const path = require("path"); // 경로처리
 
@@ -8,30 +9,22 @@ app.set("port", process.env.PORT || 3000);
 
 // 미들웨어 사용
 app.use(
-  "/main",
   (req, res, next) => {
-    console.log("이 코드는 모든 요청에 실행합니다1.");
+    console.log("이 코드는 모든 요청에 실행합니다.");
     next(); // 다음라우터 찾기
   },
   (req, res, next) => {
-    console.log("이 코드는 모든 요청에 실행합니다2.");
-    next(); // 다음라우터 찾기
-  },
-  (req, res, next) => {
-    console.log("이 코드는 모든 요청에 실행합니다3.");
-    next(); // 다음라우터 찾기
-  },
-  (req, res, next) => {
-    throw new Error("에러 발생.");
+    try{
+      console.log("에러...나는거냐?");
+      throw new Error("ㅠㅠ");
+    }catch{
+      next(error); // next는 다음 미들웨어로 넘긴다. 단, next함수에 인수를 전달하면 다음 미들웨어가 아닌 에러처리 미들웨어로 넘어간다.
+    }
   }
 );
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
-  // 1. 한 라우터 안에는 하나의 요청(res)만 가능하다.
-  // res.send("hello root");
-  // 2. 라우터 내부에서 요청이 완료되었다고 함수가 종료되지 않는다.
-  console.log("응답 후에도 이 코드가 실행이 됩니다.");
 });
 
 app.get("/main", (req, res) => {
@@ -59,7 +52,7 @@ app.get("*", (req, res) => {
 // 에러 미들웨어의 인수는 무조건 4개 모두 입력해야한다.
 app.use((err, req, res, next) => {
   console.log(err);
-  res.send("에러났다잉 고쳐라잉");
+  res.send("에러발생!");
 });
 
 // 서버 실행
