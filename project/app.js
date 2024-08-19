@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path'); // 경로처리
 
 const app = express();
 
@@ -6,7 +7,7 @@ const app = express();
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', (req, res) => {
-    res.send('hello express');
+    res.sendFile(path.join(__dirname, 'index.html'));
 })
 
 app.get('/main', (req, res) => {
