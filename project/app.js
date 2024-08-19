@@ -7,10 +7,21 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 // 미들웨어 사용
-app.use("/main", (req, res, next) => {
-  console.log("이 코드는 모든 요청에 실행합니다.");
-  next(); // 다음라우터 찾기
-});
+app.use(
+  "/main",
+  (req, res, next) => {
+    console.log("이 코드는 모든 요청에 실행합니다1.");
+    next(); // 다음라우터 찾기
+  },
+  (req, res, next) => {
+    console.log("이 코드는 모든 요청에 실행합니다2.");
+    next(); // 다음라우터 찾기
+  },
+  (req, res, next) => {
+    console.log("이 코드는 모든 요청에 실행합니다3.");
+    next(); // 다음라우터 찾기
+  }
+);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
