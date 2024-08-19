@@ -8,7 +8,7 @@ const app = express();
 // 변수 설정(port 변수에 3000 설정)
 app.set("port", process.env.PORT || 3000);
 
-app.use(morgan('dev'))
+app.use(morgan('combined'))
 
 // 미들웨어 사용
 app.use(
