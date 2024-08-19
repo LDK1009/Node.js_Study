@@ -7,7 +7,7 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 // 미들웨어 사용
-app.use((req, res, next) => {
+app.use("/main", (req, res, next) => {
   console.log("이 코드는 모든 요청에 실행합니다.");
   next(); // 다음라우터 찾기
 });
