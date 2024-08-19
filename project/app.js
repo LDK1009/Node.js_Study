@@ -15,9 +15,8 @@ app.use(
   },
   (req, res, next) => {
     try{
-      console.log("에러...나는거냐?");
-      throw new Error("ㅠㅠ");
-    }catch{
+      console.log(asdfasdf);
+    }catch(error){
       next(error); // next는 다음 미들웨어로 넘긴다. 단, next함수에 인수를 전달하면 다음 미들웨어가 아닌 에러처리 미들웨어로 넘어간다.
     }
   }
@@ -51,7 +50,7 @@ app.get("*", (req, res) => {
 // 에러처리
 // 에러 미들웨어의 인수는 무조건 4개 모두 입력해야한다.
 app.use((err, req, res, next) => {
-  console.log(err);
+  console.error(err);
   res.send("에러발생!");
 });
 
