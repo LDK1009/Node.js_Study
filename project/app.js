@@ -1,4 +1,5 @@
 const { error } = require("console");
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path"); // 경로처리
@@ -8,7 +9,9 @@ const app = express();
 // 변수 설정(port 변수에 3000 설정)
 app.set("port", process.env.PORT || 3000);
 
-app.use(morgan('combined'))
+app.use(morgan('dev'))
+app.use(cookieParser());
+
 
 // 미들웨어 사용
 app.use(
@@ -18,8 +21,10 @@ app.use(
   },
 );
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+app.get("/", (req, res, next) => {
+  res.clearCookie("username");
+  next();
+  // res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/main", (req, res) => {
