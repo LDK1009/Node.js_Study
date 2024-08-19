@@ -1,5 +1,6 @@
 const { error } = require("console");
 const express = require("express");
+const morgan = require("morgan");
 const path = require("path"); // 경로처리
 
 const app = express();
@@ -7,19 +8,14 @@ const app = express();
 // 변수 설정(port 변수에 3000 설정)
 app.set("port", process.env.PORT || 3000);
 
+app.use(morgan('dev'))
+
 // 미들웨어 사용
 app.use(
   (req, res, next) => {
     console.log("이 코드는 모든 요청에 실행합니다.");
     next(); // 다음라우터 찾기
   },
-  (req, res, next) => {
-    try{
-      console.log(asdfasdf);
-    }catch(error){
-      next(error); // next는 다음 미들웨어로 넘긴다. 단, next함수에 인수를 전달하면 다음 미들웨어가 아닌 에러처리 미들웨어로 넘어간다.
-    }
-  }
 );
 
 app.get("/", (req, res) => {
