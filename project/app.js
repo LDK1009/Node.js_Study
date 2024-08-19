@@ -20,6 +20,9 @@ app.use(
   (req, res, next) => {
     console.log("이 코드는 모든 요청에 실행합니다3.");
     next(); // 다음라우터 찾기
+  },
+  (req, res, next) => {
+    throw new Error("에러 발생.");
   }
 );
 
@@ -46,6 +49,13 @@ app.get("/main/:user", (req, res) => {
 // 아스트로(*)는 해당 메서드의 모든 경로에 해당하는 응답을 제공한다(즉, 최하단에 위치해야함)
 app.get("*", (req, res) => {
   res.send("hello evrybody");
+});
+
+// 에러처리
+// 에러 미들웨어의 인수는 무조건 4개 모두 입력해야한다.
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send("에러났다잉 고쳐라잉");
 });
 
 // 서버 실행
