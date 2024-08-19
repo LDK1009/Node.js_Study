@@ -12,7 +12,8 @@ app.set("port", process.env.PORT || 3000);
 
 app.use(morgan('dev'))
 app.use(cookieParser('amhozirong'));
-
+app.use(express.json()); // json 데이터 파싱
+app.use(express.urlencoded({extended:true})); // 폼(form) 데이터 파싱
 
 // 미들웨어 사용
 app.use(
