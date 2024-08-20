@@ -13,7 +13,14 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 app.use(morgan('dev'))
-app.use('/img', express.static(path.join(__dirname, 'public'))); // static 미들웨어 호출 위치 신경쓰기!
+app.use('/img',
+  (req, res, next)=>{
+    if(req.session.id){
+      express.static(path.join(__dirname, 'public'))(req, res, next); // static 미들웨어 호출 위치 신경쓰기!
+    }else{
+      next()
+    }
+  }
 app.use(cookieParser('amhozirong'));
 app.use(session(
   {
@@ -41,13 +48,11 @@ app.use(
 app.get("/", (req, res, next) => {
   res.cookie('signedCookie', 'signedValue', { maxAge: 900000, httpOnly: true, signed: true });
   next();
-  req.data = '넘길 데이터';
   // res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/main", (req, res) => {
   res.send("hello main");
-  req.data = '받고 더블로';
 });
 
 app.get("/login", (req, res) => {
