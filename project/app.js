@@ -7,52 +7,38 @@ const { connect } = require("http2");
 const morgan = require("morgan");
 const path = require("path"); // 경로처리
 
+const indexRouter = require("./routes/index");
+const mainRouter = require("./routes/main");
+
 const app = express();
 
 // 변수 설정(port 변수에 3000 설정)
 app.set("port", process.env.PORT || 3000);
 
-app.use(morgan('dev'))
-app.use('/img',
-  (req, res, next)=>{
-    if(req.session.id){
-      express.static(path.join(__dirname, 'public'))(req, res, next); // static 미들웨어 호출 위치 신경쓰기!
-    }else{
-      next()
-    }
-  }
-app.use(cookieParser('amhozirong'));
-app.use(session(
-  {
-    resave:false,
-    saveUninitialized:false,
-    secret: 'ldkpw',
-    cookie:{
-      httpOnly:true,
+app.use(morgan("dev"));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "ldkpw",
+    cookie: {
+      httpOnly: true,
     },
-    name: connect.sid
-  }
-));
+    name: connect.sid,
+  })
+);
 app.use(express.json()); // json 데이터 파싱
-app.use(express.urlencoded({extended:true})); // 폼(form) 데이터 파싱
+app.use(express.urlencoded({ extended: true })); // 폼(form) 데이터 파싱
+
+// 라우터 분리
+app.use("/", indexRouter);
+app.use("/main", mainRouter);
 
 // 미들웨어 사용
-app.use(
-  (req, res, next) => {
-    req.session
-    console.log("이 코드는 모든 요청에 실행합니다.");
-    next(); // 다음라우터 찾기
-  },
-);
-
-app.get("/", (req, res, next) => {
-  res.cookie('signedCookie', 'signedValue', { maxAge: 900000, httpOnly: true, signed: true });
-  next();
-  // res.sendFile(path.join(__dirname, "index.html"));
-});
-
-app.get("/main", (req, res) => {
-  res.send("hello main");
+app.use((req, res, next) => {
+  req.session;
+  console.log("이 코드는 모든 요청에 실행합니다.");
+  next(); // 다음라우터 찾기
 });
 
 app.get("/login", (req, res) => {
@@ -67,10 +53,6 @@ app.get("/main/:user", (req, res) => {
   res.send("hello wildcard");
 });
 
-// 아스트로(*)는 해당 메서드의 모든 경로에 해당하는 응답을 제공한다(즉, 최하단에 위치해야함)
-app.get("*", (req, res) => {
-  res.send("hello evrybody");
-});
 
 // 에러처리
 // 에러 미들웨어의 인수는 무조건 4개 모두 입력해야한다.
