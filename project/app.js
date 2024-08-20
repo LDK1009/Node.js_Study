@@ -1,7 +1,9 @@
 const { error } = require("console");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const session = require("express-session");
 const { Cookie } = require("express-session");
+const { connect } = require("http2");
 const morgan = require("morgan");
 const path = require("path"); // 경로처리
 
@@ -11,14 +13,26 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 app.use(morgan('dev'))
-app.use('/img', express.static(path.join(__dirname, 'public')));
+app.use('/img', express.static(path.join(__dirname, 'public'))); // static 미들웨어 호출 위치 신경쓰기!
 app.use(cookieParser('amhozirong'));
+app.use(session(
+  {
+    resave:false,
+    saveUninitialized:false,
+    secret: 'ldkpw',
+    cookie:{
+      httpOnly:true,
+    },
+    name: connect.sid
+  }
+));
 app.use(express.json()); // json 데이터 파싱
 app.use(express.urlencoded({extended:true})); // 폼(form) 데이터 파싱
 
 // 미들웨어 사용
 app.use(
   (req, res, next) => {
+    req.session
     console.log("이 코드는 모든 요청에 실행합니다.");
     next(); // 다음라우터 찾기
   },
@@ -27,11 +41,13 @@ app.use(
 app.get("/", (req, res, next) => {
   res.cookie('signedCookie', 'signedValue', { maxAge: 900000, httpOnly: true, signed: true });
   next();
+  req.data = '넘길 데이터';
   // res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/main", (req, res) => {
   res.send("hello main");
+  req.data = '받고 더블로';
 });
 
 app.get("/login", (req, res) => {
