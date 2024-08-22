@@ -43,16 +43,19 @@ sequelize
     console.error(err);
   });
 
-// 새 사용자 생성
-userTable.create({
-  nickname: 'John Doe',
-  email: 'john@example.com',
-  password: 'securepassword'
-}).then(user => {
-  console.log('User created:', user);
-}).catch(err => {
-  console.error('Error creating user:', err);
-});
+// 데이터 읽기(Read)
+userTable.findAll({ where: { password: 'securepassword' } })
+  .then(res => {
+    if (res) {
+      console.log('User found: >>', res[0].dataValues, res[1].dataValues);
+    } else {
+      console.log('User not found');
+    }
+  })
+  .catch(err => {
+    console.error('Error finding user:', err);
+  });
+
 
 // 라우터 분리
 app.use("/", indexRouter);
