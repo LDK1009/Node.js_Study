@@ -42,17 +42,14 @@ sequelize
     console.error(err);
   });
 
-// 데이터 수정(Update)
+// 데이터 삭제(Delete)
 userTable
-  .update(
-    { nickname: "updateNickName" }, // 변경할 데이터
-    { where: { id: 1 } } // 조건
-  )
-  .then((result) => {
-    console.log("Update successful:", result);
+  .destroy({ where: { id: 2 } })
+  .then(() => {
+    console.log("User deleted");
   })
   .catch((err) => {
-    console.error("Error updating user:", err);
+    console.error("Error deleting user:", err);
   });
 
 // 라우터 분리
