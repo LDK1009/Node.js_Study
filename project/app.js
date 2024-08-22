@@ -10,6 +10,8 @@ const path = require("path"); // 경로처리
 const indexRouter = require("./routes/index");
 const mainRouter = require("./routes/main");
 
+const { sequelize } = require("./models/index");
+
 const app = express();
 
 // 변수 설정(port 변수에 3000 설정)
@@ -29,6 +31,15 @@ app.use(
 );
 app.use(express.json()); // json 데이터 파싱
 app.use(express.urlencoded({ extended: true })); // 폼(form) 데이터 파싱
+
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("데이터베이스 연결 성공");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 // 라우터 분리
 app.use("/", indexRouter);
@@ -52,7 +63,6 @@ app.get("/main/ldk", (req, res) => {
 app.get("/main/:user", (req, res) => {
   res.send("hello wildcard");
 });
-
 
 // 에러처리
 // 에러 미들웨어의 인수는 무조건 4개 모두 입력해야한다.
