@@ -8,20 +8,24 @@ class User extends Sequelize.Model {
     User.init(
       {
         // name 필드: 최대 20자, null 허용하지 않음, 유일한 값이어야 함
-        name: {
-          type: Sequelize.STRING(20),
+        nickname: {
+          type: Sequelize.STRING(30),
           allowNull: false,
           unique: true,
         },
         // email 필드: 부호 없는 정수, null 허용하지 않음
         email: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.STRING(100),
           allowNull: false,
         },
         // password 필드: 최대 20자, null 허용하지 않음
         password: {
-          type: Sequelize.STRING(20),
+          type: Sequelize.STRING(50),
           allowNull: false,
+        },
+        profileImage: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
         },
       },
       {
