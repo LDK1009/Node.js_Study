@@ -44,7 +44,10 @@ sequelize
 
 // 데이터 삭제(Delete)
 userTable
-  .destroy({ where: { id: 2 } })
+  .destroy({
+    where: { id: 4 },
+    force: true, // 이 옵션을 사용하면 즉시 삭제 (소프트 삭제가 아님)
+  })
   .then(() => {
     console.log("User deleted");
   })
