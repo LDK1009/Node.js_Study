@@ -11,8 +11,7 @@ const indexRouter = require("./routes/index");
 const mainRouter = require("./routes/main");
 
 const { sequelize } = require("./models/index");
-const userTable = require('./models/user');
-
+const userTable = require("./models/user");
 
 const app = express();
 
@@ -43,19 +42,18 @@ sequelize
     console.error(err);
   });
 
-// 데이터 읽기(Read)
-userTable.findAll({ where: { password: 'securepassword' } })
-  .then(res => {
-    if (res) {
-      console.log('User found: >>', res[0].dataValues, res[1].dataValues);
-    } else {
-      console.log('User not found');
-    }
+// 데이터 수정(Update)
+userTable
+  .update(
+    { nickname: "updateNickName" }, // 변경할 데이터
+    { where: { id: 1 } } // 조건
+  )
+  .then((result) => {
+    console.log("Update successful:", result);
   })
-  .catch(err => {
-    console.error('Error finding user:', err);
+  .catch((err) => {
+    console.error("Error updating user:", err);
   });
-
 
 // 라우터 분리
 app.use("/", indexRouter);
